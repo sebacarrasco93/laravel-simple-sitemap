@@ -4,7 +4,6 @@ namespace SebaCarrasco93\SimpleSitemap;
 
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
-use SebaCarrasco93\SimpleSitemap\Commands\SimpleSitemapCommand;
 
 class SimpleSitemapServiceProvider extends PackageServiceProvider
 {
