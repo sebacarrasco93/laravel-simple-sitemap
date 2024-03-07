@@ -2,5 +2,5 @@
 
 return [
     'default_frequency' => 'daily',
-    'default_priority' => 0.5,
+    'default_priority' => '0.50',
 ];
