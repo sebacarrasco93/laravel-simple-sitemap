@@ -13,8 +13,7 @@ class SimpleSitemap
 {
     public function __construct(
         public SitemapIndex $sitemap_index, public Sitemap $sitemap
-    )
-    {
+    ) {
     }
 
     public function checkRoutes(array $routes = []): void
@@ -33,7 +32,7 @@ class SimpleSitemap
     public function index(array $routes = []): Response
     {
         $this->checkRoutes($routes);
-        
+
         foreach ($routes as $route) {
             $this->sitemap_index->add(UrlSitemapIndex::create($route));
         }
