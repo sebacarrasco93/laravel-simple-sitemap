@@ -1,6 +1,6 @@
 <?php
 
-// config for SebaCarrasco93/SimpleSitemap
 return [
-
+    'default_frequency' => 'daily',
+    'default_priority' => 0.5,
 ];

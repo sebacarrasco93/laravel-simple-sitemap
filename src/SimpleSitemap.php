@@ -2,13 +2,17 @@
 
 namespace SebaCarrasco93\SimpleSitemap;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use SebaCarrasco93\SimpleSitemap\Generator\Sitemap;
 use SebaCarrasco93\SimpleSitemap\Generator\SitemapIndex;
 use SebaCarrasco93\SimpleSitemap\Generator\UrlSitemapIndex;
 
 class SimpleSitemap
 {
-    public function __construct(public SitemapIndex $sitemap_index)
+    public function __construct(
+        public SitemapIndex $sitemap_index, public Sitemap $sitemap
+    )
     {
     }
 
@@ -19,6 +23,12 @@ class SimpleSitemap
         }
     }
 
+    private function process($instance)
+    {
+        return response($instance->build())
+            ->header('Content-Type', 'text/xml');
+    }
+
     public function index(array $routes = []): Response
     {
         $this->checkRoutes($routes);
@@ -27,7 +37,26 @@ class SimpleSitemap
             $this->sitemap_index->add(UrlSitemapIndex::create($route));
         }
 
-        return response($this->sitemap_index->build())
-            ->header('Content-Type', 'text/xml');
+        return $this->process($this->sitemap_index);
+    }
+
+    public function fromCollection(Collection $collection)
+    {
+        // $this->checkRoutes($collection);
+
+        $collection->each(function ($item) {
+
+            dd($item->getSitemapAttributes());
+            // dd($item->url);
+            $this->sitemap->add(
+                $item->getSitemapAttributes()
+                // Url::create($item->sitemap_url())
+                //     ->lastUpdate($item->updated_at)
+                //     ->frequency($item->frequency)
+                //     ->priority($item->priority)
+            );
+        });
+
+        dd($this->sitemap->build());
     }
 }
