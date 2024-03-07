@@ -104,7 +104,7 @@ return SimpleSitemap::index($routes);
 Can I short the syntax? Of course!
 
 ```php
-return SimpleSitemap::fromCollection(Category::get());
+return SimpleSitemap::collect(Category::get());
 ```
 
 A sitemap for only active categories? Sure!
@@ -112,7 +112,7 @@ A sitemap for only active categories? Sure!
 ```php
 $active_categories = Category::where('active', true)->get();
 
-return SimpleSitemap::fromCollection($active_categories);
+return SimpleSitemap::collect($active_categories);
 ```
 
 A sitemap for active, and only 10 last categories? It's Eloquent and Laravel!
@@ -121,7 +121,7 @@ A sitemap for active, and only 10 last categories? It's Eloquent and Laravel!
 $active_categories = Category::where('active', true)
     ->orderBy('desc', 'id')->take(10)->get();
 
-return SimpleSitemap::fromCollection($active_categories);
+return SimpleSitemap::collect($active_categories);
 ```
 
 ## Testing

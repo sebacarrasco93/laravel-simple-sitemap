@@ -17,14 +17,14 @@ class SimpleSitemap
     {
     }
 
-    public function checkRoutes(array $routes = [])
+    public function checkRoutes(array $routes = []): void
     {
         if (! count($routes)) {
             throw new Exceptions\EmptyRoutes();
         }
     }
 
-    private function process($instance)
+    private function process($instance): Response
     {
         return response($instance->build())
             ->header('Content-Type', 'text/xml');
@@ -41,14 +41,14 @@ class SimpleSitemap
         return $this->process($this->sitemap_index);
     }
 
-    public function checkMethod($item, string $method_name)
+    public function checkMethod($item, string $method_name): void
     {
         if (! method_exists($item, $method_name)) {
             throw new Exceptions\MissingTrait('SimpleSitemapCollection');
         }
     }
 
-    public function fromCollection(Collection $collection)
+    public function fromCollection(Collection $collection): Response
     {
         $collection->each(function ($item) {
             $this->checkMethod($item, 'getSitemapAttributes');
@@ -64,5 +64,10 @@ class SimpleSitemap
         });
 
         return $this->process($this->sitemap);
+    }
+
+    public function collect(Collection $collection): Response
+    {
+        return $this->fromCollection($collection);
     }
 }
