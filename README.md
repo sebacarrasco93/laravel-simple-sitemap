@@ -51,7 +51,43 @@ php artisan vendor:publish --tag="laravel-simple-sitemap-views"
 
 ## Usage
 
-Create a index sitemap
+Create a sitemap for Eloquent Collections
+
+Let's assume that you want to make a sitemap of all the categories, you can do that in only 3 steps!
+
+```php
+// app/Models/Category
+
+class Category extends Model
+{
+    use HasFactory;
+    // ...
+    use \SebaCarrasco93\SimpleSitemap\Traits\SimpleSitemapCollection; // 👈 Step 1: Import Trait
+
+    // ...
+
+    // 👇 Step 2: Create getSitemapUrlAttribute() method and specify the full url
+    public function getSitemapUrlAttribute(): string 
+    {
+        return route('category.show', $this);
+    }
+}
+
+```
+
+Now, you can use it
+
+```php
+// web.php, controller or equivalent
+
+$categories = Category::get();
+
+return SimpleSitemap::fromCollection($categories);
+```
+
+Easy Peasy!
+
+Now, you can create a index sitemap
 
 ```php
 $routes = [
@@ -61,6 +97,31 @@ $routes = [
 ];
 
 return SimpleSitemap::index($routes);
+```
+
+### Advanced use
+
+Can I short the syntax? Of course!
+
+```php
+return SimpleSitemap::fromCollection(Category::get());
+```
+
+A sitemap for only active categories? Sure!
+
+```php
+$active_categories = Category::where('active', true)->get();
+
+return SimpleSitemap::fromCollection($active_categories);
+```
+
+A sitemap for active, and only 10 last categories? It's Eloquent and Laravel!
+
+```php
+$active_categories = Category::where('active', true)
+    ->orderBy('desc', 'id')->take(10)->get();
+
+return SimpleSitemap::fromCollection($active_categories);
 ```
 
 ## Testing
