@@ -51,9 +51,16 @@ php artisan vendor:publish --tag="laravel-simple-sitemap-views"
 
 ## Usage
 
+Create a index
+
 ```php
-$simpleSitemap = new SebaCarrasco93\SimpleSitemap();
-echo $simpleSitemap->echoPhrase('Hello, SebaCarrasco93!');
+$routes = [
+    route('index'), // 1
+    'https://yourdomain.com/', // 2
+    'relative-url', // 3
+];
+
+return SimpleSitemap::index($routes);
 ```
 
 ## Testing
