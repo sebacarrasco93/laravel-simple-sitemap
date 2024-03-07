@@ -20,8 +20,9 @@ This is the contents of the published config file:
 
 ```php
 return [    
-    'default_frequency' => 'monthly',
 
+    'default_frequency' => 'monthly',
+    
     'default_priority' => '0.50',
 ];
 ```
@@ -35,15 +36,17 @@ Let's assume that you want to make a sitemap of all the categories, you can do t
 ```php
 // app/Models/Category
 
+use SebaCarrasco93\SimpleSitemap\Traits\SimpleSitemapCollection; // 👈 1: Import Trait
+
 class Category extends Model
 {
     use HasFactory;
     // ...
-    use \SebaCarrasco93\SimpleSitemap\Traits\SimpleSitemapCollection; // 👈 Step 1: Import Trait
+    use SimpleSitemapCollection; // 👈 2: Use the trait
 
     // ...
 
-    // 👇 Step 2: Create getSitemapUrlAttribute() method and specify the full url
+    // 👇 Step 3: Create getSitemapUrlAttribute() method and specify the full url
     public function getSitemapUrlAttribute(): string 
     {
         return route('category.show', $this);
@@ -64,7 +67,7 @@ return SimpleSitemap::fromCollection($categories);
 
 Easy Peasy!
 
-Now, you can create a index sitemap
+Optionally, you can create a index sitemap with your sitemap collections
 
 ```php
 $routes = [
