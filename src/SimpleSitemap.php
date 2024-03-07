@@ -56,11 +56,10 @@ class SimpleSitemap
             extract($item->getSitemapAttributes());
 
             $this->sitemap->add(
-                // $item->getSitemapAttributes()
                 Url::create($url)
                     ->lastUpdate($updated_at)
                     ->frequency($frequency)
-                    ->priority($item->priority)
+                    ->priority($priority)
             );
         });
 
