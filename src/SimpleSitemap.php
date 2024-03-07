@@ -47,7 +47,7 @@ class SimpleSitemap
         }
     }
 
-    public function fromCollection(Collection $collection): Response
+    public function fromEloquentCollection(Collection $collection): Response
     {
         $collection->each(function ($item) {
             $this->checkMethod($item, 'getSitemapAttributes');
@@ -63,10 +63,5 @@ class SimpleSitemap
         });
 
         return $this->process($this->sitemap);
-    }
-
-    public function collect(Collection $collection): Response
-    {
-        return $this->fromCollection($collection);
     }
 }

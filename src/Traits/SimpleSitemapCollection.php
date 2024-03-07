@@ -2,7 +2,10 @@
 
 namespace SebaCarrasco93\SimpleSitemap\Traits;
 
+use Illuminate\Contracts\Database\Eloquent\Builder;
+use Illuminate\Http\Response;
 use SebaCarrasco93\SimpleSitemap\Exceptions\MissingSitemapUrlInsideModel;
+use SebaCarrasco93\SimpleSitemap\Facades\SimpleSitemap;
 
 trait SimpleSitemapCollection
 {
@@ -23,5 +26,10 @@ trait SimpleSitemapCollection
             'frequency' => $this->frequency ?? config('simple-sitemap.default_frequency'),
             'priority' => $this->priority ?? config('simple-sitemap.default_priority'),
         ];
+    }
+
+    public function scopeSitemap(Builder $builder): Response
+    {
+        return SimpleSitemap::fromEloquentCollection($builder->get());
     }
 }
