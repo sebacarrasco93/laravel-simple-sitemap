@@ -40,13 +40,20 @@ class SimpleSitemap
         return $this->process($this->sitemap_index);
     }
 
+    public function checkMethod($item, string $method_name)
+    {
+        if (! method_exists($item, $method_name)) {
+            throw new Exceptions\MissingTrait('SimpleSitemapCollection');
+        }
+    }
+
     public function fromCollection(Collection $collection)
     {
-        // $this->checkRoutes($collection);
-
         $collection->each(function ($item) {
-
-            dd($item->getSitemapAttributes());
+            $this->checkMethod($item, 'getSitemapAttributes');
+            
+            // dd($item->method_exists('getSitemapAttributes'));
+            // dd($item->getSitemapAttributes());
             // dd($item->url);
             $this->sitemap->add(
                 $item->getSitemapAttributes()
