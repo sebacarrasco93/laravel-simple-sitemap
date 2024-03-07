@@ -92,6 +92,55 @@ return SimpleSitemap::fromEloquentCollection($paginated_active_categories);
 
 Easy Peasy!
 
+## Add to a specific routes
+
+You can add to a custom routes in only 2 steps:
+
+Adding the Middleware
+
+```php
+// app/Http/Kernel.php
+
+// ...
+protected $middlewareAliases = [
+    // ...
+    'sitemap' => \SebaCarrasco93\SimpleSitemap\Middleware\SimpleSitemap::class,
+];
+```
+
+Using the Middleware:
+
+You can add all your `get` routes. If you add another such as `post`, `patch`, `put`, etc. it will be ignored.
+
+```php
+// web.php or equivalent
+
+Route::get('your-route', [YourController::class])
+    ->middleware('sitemap'); //  👈
+
+Route::get('your-route', function () {
+    return 'It works with a closure, too';
+})->middleware('sitemap'); // 👈
+```
+
+### Advanced
+
+If you don't wanna to add each one, you can add into your all php
+
+```php
+// app/Providers/RouteServiceProvider.php
+Route::middleware(['web', 'sitemap']) // 👈
+    ->group(base_path('routes/web.php'));
+```
+
+Now, you can see all your routes
+
+```php
+return SimpleSitemap::routes();
+```
+
+## Creating a index
+
 Optionally, you can create a index sitemap with your sitemap collections
 
 ```php
