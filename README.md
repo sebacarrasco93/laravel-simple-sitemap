@@ -20,7 +20,6 @@ This is the contents of the published config file:
 
 ```php
 return [    
-
     'default_frequency' => 'monthly',
     
     'default_priority' => '0.50',
@@ -71,7 +70,7 @@ Can I short the syntax? Of course!
 return Category::sitemap(); // Equivalent to SimpleSitemap::fromEloquentCollection(Category::get());
 ```
 
-### Advanced usage
+## Advanced usage
 
 A sitemap for only active categories? Sure!
 
@@ -102,6 +101,41 @@ $routes = [
 ];
 
 return SimpleSitemap::index($routes);
+```
+
+## Custom frequency and priority
+
+If you want to customize each frequency or priority, you can add a migration
+
+```bash
+php artisan make:migration add_sitemap_columns_to_{your_table}_table
+```
+
+```php
+$table->addColumn('string', 'frequency')->nullable();
+$table->addColumn('string', 'priority')->nullable();
+```
+
+You can also specify a custom frequency for a specific model
+
+```php
+// app/Models/YourModel.php
+
+public function getFrequencyAttribute(?string $frequency = null): string
+{
+    return $frequency ?? 'weekly';
+}
+```
+
+Specify custom frequency to a specific model
+
+```php
+// app/Models/YourModel.php
+
+public function getPriorityAttribute(?string $priority = null): string
+{
+    return $priority ?? '0.1';
+}
 ```
 
 ## Testing
