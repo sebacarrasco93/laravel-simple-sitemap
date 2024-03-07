@@ -62,7 +62,31 @@ Now, you can use it
 
 $categories = Category::get();
 
-return SimpleSitemap::fromCollection($categories);
+return SimpleSitemap::fromEloquentCollection($categories);
+```
+
+Can I short the syntax? Of course!
+
+```php
+return Category::sitemap(); // Equivalent to SimpleSitemap::fromEloquentCollection(Category::get());
+```
+
+### Advanced usage
+
+A sitemap for only active categories? Sure!
+
+```php
+return Category::where('active', true)
+    ->sitemap();
+```
+
+A sitemap for active, and only 10 last categories? It's Eloquent and Laravel!
+
+```php
+$active_categories = Category::where('active', true)
+    ->orderBy('desc', 'id')->take(10)->get();
+
+return SimpleSitemap::fromCollection($active_categories);
 ```
 
 Easy Peasy!
@@ -77,31 +101,6 @@ $routes = [
 ];
 
 return SimpleSitemap::index($routes);
-```
-
-### Advanced use
-
-Can I short the syntax? Of course!
-
-```php
-return SimpleSitemap::collect(Category::get());
-```
-
-A sitemap for only active categories? Sure!
-
-```php
-$active_categories = Category::where('active', true)->get();
-
-return SimpleSitemap::collect($active_categories);
-```
-
-A sitemap for active, and only 10 last categories? It's Eloquent and Laravel!
-
-```php
-$active_categories = Category::where('active', true)
-    ->orderBy('desc', 'id')->take(10)->get();
-
-return SimpleSitemap::collect($active_categories);
 ```
 
 ## Testing

@@ -2,6 +2,8 @@
 
 namespace SebaCarrasco93\SimpleSitemap;
 
+use Closure;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
 
