@@ -80,13 +80,14 @@ return Category::where('active', true)
     ->sitemap();
 ```
 
-A sitemap for active, and only 10 last categories? It's Eloquent and Laravel!
+A sitemap for active, in desc order and paginate? It's Eloquent and Laravel!
 
 ```php
-$active_categories = Category::where('active', true)
-    ->orderBy('desc', 'id')->take(10)->get();
+$paginated_active_categories = Category::where('active', true)
+    ->orderBy('desc', 'id')
+    ->paginate();
 
-return SimpleSitemap::fromCollection($active_categories);
+return SimpleSitemap::fromEloquentCollection($paginated_active_categories);
 ```
 
 Easy Peasy!

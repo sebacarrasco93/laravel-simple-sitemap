@@ -4,6 +4,8 @@ namespace SebaCarrasco93\SimpleSitemap;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use SebaCarrasco93\SimpleSitemap\Exceptions\EmptyRoutes;
+use SebaCarrasco93\SimpleSitemap\Exceptions\MissingTrait;
 use SebaCarrasco93\SimpleSitemap\Generator\Sitemap;
 use SebaCarrasco93\SimpleSitemap\Generator\SitemapIndex;
 use SebaCarrasco93\SimpleSitemap\Generator\Url;
@@ -19,7 +21,7 @@ class SimpleSitemap
     public function checkRoutes(array $routes = []): void
     {
         if (! count($routes)) {
-            throw new Exceptions\EmptyRoutes();
+            throw new EmptyRoutes();
         }
     }
 
@@ -43,7 +45,7 @@ class SimpleSitemap
     public function checkMethod($item, string $method_name): void
     {
         if (! method_exists($item, $method_name)) {
-            throw new Exceptions\MissingTrait('SimpleSitemapCollection');
+            throw new MissingTrait('SimpleSitemapCollection');
         }
     }
 
