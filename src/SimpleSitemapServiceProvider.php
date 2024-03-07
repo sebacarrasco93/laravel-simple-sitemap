@@ -17,9 +17,6 @@ class SimpleSitemapServiceProvider extends PackageServiceProvider
          */
         $package
             ->name('laravel-simple-sitemap')
-            ->hasConfigFile()
-            ->hasViews()
-            ->hasMigration('create_laravel-simple-sitemap_table')
-            ->hasCommand(SimpleSitemapCommand::class);
+            ->hasConfigFile('simple-sitemap');
     }
 }
