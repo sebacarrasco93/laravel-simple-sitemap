@@ -51,13 +51,13 @@ php artisan vendor:publish --tag="laravel-simple-sitemap-views"
 
 ## Usage
 
-Create a index
+Create a index sitemap
 
 ```php
 $routes = [
-    route('index'), // 1
-    'https://yourdomain.com/', // 2
-    'relative-url', // 3
+    route('sitemaps/index-1'), // You can pass it as a route
+    'https://yourdomain.com/sitemaps/index-2', // or, as full path
+    '/sitemaps/index-3', // as a relative path, too
 ];
 
 return SimpleSitemap::index($routes);
