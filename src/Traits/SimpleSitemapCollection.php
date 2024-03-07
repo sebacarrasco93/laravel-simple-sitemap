@@ -19,7 +19,7 @@ trait SimpleSitemapCollection
 
         return [
             'url' => $this->sitemap_url,
-            'lastUpdate' => $this->updated_at,
+            'updated_at' => $this->updated_at,
             'frequency' => $this->frequency ?? config('simple-sitemap.default_frequency'),
             'priority' => $this->priority ?? config('simple-sitemap.default_priority'),
         ];

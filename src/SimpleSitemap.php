@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
 use SebaCarrasco93\SimpleSitemap\Generator\Sitemap;
 use SebaCarrasco93\SimpleSitemap\Generator\SitemapIndex;
+use SebaCarrasco93\SimpleSitemap\Generator\Url;
 use SebaCarrasco93\SimpleSitemap\Generator\UrlSitemapIndex;
 
 class SimpleSitemap
@@ -51,19 +52,18 @@ class SimpleSitemap
     {
         $collection->each(function ($item) {
             $this->checkMethod($item, 'getSitemapAttributes');
-            
-            // dd($item->method_exists('getSitemapAttributes'));
-            // dd($item->getSitemapAttributes());
-            // dd($item->url);
+
+            extract($item->getSitemapAttributes());
+
             $this->sitemap->add(
-                $item->getSitemapAttributes()
-                // Url::create($item->sitemap_url())
-                //     ->lastUpdate($item->updated_at)
-                //     ->frequency($item->frequency)
-                //     ->priority($item->priority)
+                // $item->getSitemapAttributes()
+                Url::create($url)
+                    ->lastUpdate($updated_at)
+                    ->frequency($frequency)
+                    ->priority($item->priority)
             );
         });
 
-        dd($this->sitemap->build());
+        return $this->process($this->sitemap);
     }
 }
