@@ -4,6 +4,7 @@ namespace SebaCarrasco93\SimpleSitemap;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Route;
 use SebaCarrasco93\SimpleSitemap\Exceptions\EmptyRoutes;
 use SebaCarrasco93\SimpleSitemap\Exceptions\MissingTrait;
 use SebaCarrasco93\SimpleSitemap\Generator\Sitemap;
@@ -65,5 +66,16 @@ class SimpleSitemap
         });
 
         return $this->process($this->sitemap);
+    }
+
+    public function routes()
+    {
+        return collect(Route::getRoutes())->filter(function ($route) {
+            return in_array('sitemap', $route->middleware()) &&
+                   in_array('GET', $route->methods()) &&
+                   count($route->parameterNames()) === 0;
+        })->map(function ($route) {
+            return url($route->uri());
+        });
     }
 }
