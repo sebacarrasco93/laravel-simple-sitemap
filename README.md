@@ -96,7 +96,7 @@ Easy Peasy!
 
 You can add to a custom routes in only 2 steps:
 
-Adding the Middleware
+Adding the Middlewares
 
 ```php
 // app/Http/Kernel.php
@@ -131,6 +131,16 @@ If you don't wanna to add each one, you can add into your all php
 // app/Providers/RouteServiceProvider.php
 Route::middleware(['web', 'sitemap']) // 👈
     ->group(base_path('routes/web.php'));
+```
+
+Also, if you want to exclude a specific route from a group, you can add `sitemap:exclude` middleware
+
+```php
+// web.php or equivalent
+
+Route::get('to_exclude', function () {
+    // You very important route to exclude
+})->middleware('sitemap:exclude);
 ```
 
 Now, you can see all your routes

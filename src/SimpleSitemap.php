@@ -71,7 +71,7 @@ class SimpleSitemap
     public function fromMiddleware()
     {
         return collect(Route::getRoutes())->filter(function ($route) {
-            return in_array('sitemap', $route->middleware()) &&
+            return (in_array('sitemap', $route->middleware()) && ! in_array('sitemap:exclude', $route->middleware())) &&
                    in_array('GET', $route->methods()) &&
                    count($route->parameterNames()) === 0;
         })->map(function ($route) {
@@ -82,6 +82,8 @@ class SimpleSitemap
     public function routes()
     {
         $routes = $this->fromMiddleware();
+
+        dd($routes);
 
         $routes->each(function ($item) {
             $this->sitemap->add(
