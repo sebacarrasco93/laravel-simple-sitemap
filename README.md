@@ -140,7 +140,7 @@ Also, if you want to exclude a specific route from a group, you can add `sitemap
 
 Route::get('to_exclude', function () {
     // You very important route to exclude
-})->middleware('sitemap:exclude);
+})->middleware('sitemap:exclude');
 ```
 
 Now, you can see all your routes
