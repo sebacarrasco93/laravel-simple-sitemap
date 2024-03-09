@@ -31,15 +31,17 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Last update
+    | Exceptions
     |--------------------------------------------------------------------------
     |
-    | This value is the default last update
-    | If you want to get considered by Google, you need to specify
+    | This values are necessary.
+    | This is a way to you know what is wrong with your sitemap.
     |
-    | Suppported values: from 0.0 to 1.0
+    | For example, you can define your own exceptions and notify.
     |
     */
 
-    'default_last_update' => '0.50',
+    'exceptions' => [
+        'without_latest_update' => new \Exception('The latest update is required'),
+    ],
 ];
