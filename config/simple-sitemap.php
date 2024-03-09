@@ -28,4 +28,18 @@ return [
     */
 
     'default_priority' => '0.50',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Last update
+    |--------------------------------------------------------------------------
+    |
+    | This value is the default last update
+    | If you want to get considered by Google, you need to specify
+    |
+    | Suppported values: from 0.0 to 1.0
+    |
+    */
+
+    'default_last_update' => '0.50',
 ];

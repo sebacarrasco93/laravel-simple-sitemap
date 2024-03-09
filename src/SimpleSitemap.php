@@ -68,7 +68,7 @@ class SimpleSitemap
         return $this->process($this->sitemap);
     }
 
-    public function routes()
+    public function fromMiddleware()
     {
         return collect(Route::getRoutes())->filter(function ($route) {
             return in_array('sitemap', $route->middleware()) &&
@@ -77,5 +77,21 @@ class SimpleSitemap
         })->map(function ($route) {
             return url($route->uri());
         });
+    }
+
+    public function routes()
+    {
+        $routes = $this->fromMiddleware();
+
+        $routes->each(function ($item) {
+            $this->sitemap->add(
+                Url::create($item)
+                    ->lastUpdate(config('simple-sitemap.default_last_update'))
+                    ->frequency($frequency)
+                    ->priority($priority)
+            );
+        });
+
+        return $this->process($this->sitemap);
     }
 }
