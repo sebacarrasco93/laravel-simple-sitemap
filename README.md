@@ -20,7 +20,6 @@ This is the contents of the published config file:
 
 ```php
 return [    
-
     'default_frequency' => 'monthly',
     
     'default_priority' => '0.50',
@@ -71,7 +70,7 @@ Can I short the syntax? Of course!
 return Category::sitemap(); // Equivalent to SimpleSitemap::fromEloquentCollection(Category::get());
 ```
 
-### Advanced usage
+## Advanced usage
 
 A sitemap for only active categories? Sure!
 
@@ -80,16 +79,76 @@ return Category::where('active', true)
     ->sitemap();
 ```
 
-A sitemap for active, and only 10 last categories? It's Eloquent and Laravel!
+A sitemap for active, in desc order and paginate? It's Eloquent and Laravel!
 
 ```php
-$active_categories = Category::where('active', true)
-    ->orderBy('desc', 'id')->take(10)->get();
+$paginated_active_categories = Category::where('active', true)
+    ->orderBy('desc', 'id')
+    ->paginate();
 
-return SimpleSitemap::fromCollection($active_categories);
+return SimpleSitemap::fromEloquentCollection($paginated_active_categories);
 ```
 
 Easy Peasy!
+
+## Add to a specific routes
+
+You can add to a custom routes in only 2 steps:
+
+Adding the Middlewares
+
+```php
+// app/Http/Kernel.php
+
+// ...
+protected $middlewareAliases = [
+    // ...
+    'sitemap' => \SebaCarrasco93\SimpleSitemap\Middleware\SimpleSitemap::class,
+];
+```
+
+Using the Middleware:
+
+You can add all your `get` routes. If you add another such as `post`, `patch`, `put`, etc. it will be ignored.
+
+```php
+// web.php or equivalent
+
+Route::get('your-route', [YourController::class])
+    ->middleware('sitemap'); //  👈
+
+Route::get('your-route', function () {
+    return 'It works with a closure, too';
+})->middleware('sitemap'); // 👈
+```
+
+### Advanced
+
+If you don't wanna to add each one, you can add into your all php
+
+```php
+// app/Providers/RouteServiceProvider.php
+Route::middleware(['web', 'sitemap']) // 👈
+    ->group(base_path('routes/web.php'));
+```
+
+Also, if you want to exclude a specific route from a group, you can add `sitemap:exclude` middleware
+
+```php
+// web.php or equivalent
+
+Route::get('to_exclude', function () {
+    // You very important route to exclude
+})->middleware('sitemap:exclude');
+```
+
+Now, you can see all your routes
+
+```php
+return SimpleSitemap::routes();
+```
+
+## Creating a index
 
 Optionally, you can create a index sitemap with your sitemap collections
 
@@ -101,6 +160,41 @@ $routes = [
 ];
 
 return SimpleSitemap::index($routes);
+```
+
+## Custom frequency and priority
+
+If you want to customize each frequency or priority, you can add a migration
+
+```bash
+php artisan make:migration add_sitemap_columns_to_{your_table}_table
+```
+
+```php
+$table->addColumn('string', 'frequency')->nullable();
+$table->addColumn('string', 'priority')->nullable();
+```
+
+You can also specify a custom frequency for a specific model
+
+```php
+// app/Models/YourModel.php
+
+public function getFrequencyAttribute(?string $frequency = null): string
+{
+    return $frequency ?? 'weekly';
+}
+```
+
+Specify custom frequency to a specific model
+
+```php
+// app/Models/YourModel.php
+
+public function getPriorityAttribute(?string $priority = null): string
+{
+    return $priority ?? '0.1';
+}
 ```
 
 ## Testing

@@ -28,4 +28,20 @@ return [
     */
 
     'default_priority' => '0.50',
+
+    /*
+    |--------------------------------------------------------------------------
+    | Exceptions
+    |--------------------------------------------------------------------------
+    |
+    | This values are necessary.
+    | This is a way to you know what is wrong with your sitemap.
+    |
+    | For example, you can define your own exceptions and notify.
+    |
+    */
+
+    'exceptions' => [
+        'without_latest_update' => new Exception('The latest update is required'),
+    ],
 ];

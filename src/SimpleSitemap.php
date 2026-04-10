@@ -4,6 +4,9 @@ namespace SebaCarrasco93\SimpleSitemap;
 
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Route;
+use SebaCarrasco93\SimpleSitemap\Exceptions\EmptyRoutes;
+use SebaCarrasco93\SimpleSitemap\Exceptions\MissingTrait;
 use SebaCarrasco93\SimpleSitemap\Generator\Sitemap;
 use SebaCarrasco93\SimpleSitemap\Generator\SitemapIndex;
 use SebaCarrasco93\SimpleSitemap\Generator\Url;
@@ -13,13 +16,12 @@ class SimpleSitemap
 {
     public function __construct(
         public SitemapIndex $sitemap_index, public Sitemap $sitemap
-    ) {
-    }
+    ) {}
 
     public function checkRoutes(array $routes = []): void
     {
         if (! count($routes)) {
-            throw new Exceptions\EmptyRoutes();
+            throw new EmptyRoutes;
         }
     }
 
@@ -43,7 +45,7 @@ class SimpleSitemap
     public function checkMethod($item, string $method_name): void
     {
         if (! method_exists($item, $method_name)) {
-            throw new Exceptions\MissingTrait('SimpleSitemapCollection');
+            throw new MissingTrait('SimpleSitemapCollection');
         }
     }
 
@@ -52,13 +54,41 @@ class SimpleSitemap
         $collection->each(function ($item) {
             $this->checkMethod($item, 'getSitemapAttributes');
 
-            extract($item->getSitemapAttributes());
+            /** @phpstan-ignore-next-line */
+            $attributes = $item->getSitemapAttributes();
 
             $this->sitemap->add(
-                Url::create($url)
-                    ->lastUpdate($updated_at)
-                    ->frequency($frequency)
-                    ->priority($priority)
+                Url::create($attributes['url'])
+                    ->lastUpdate($attributes['updated_at'])
+                    ->frequency($attributes['frequency'])
+                    ->priority($attributes['priority'])
+            );
+        });
+
+        return $this->process($this->sitemap);
+    }
+
+    public function fromMiddleware()
+    {
+        return collect(Route::getRoutes())->filter(function ($route) {
+            return (in_array('sitemap', $route->middleware()) && ! in_array('sitemap:exclude', $route->middleware())) &&
+                   in_array('GET', $route->methods()) &&
+                   count($route->parameterNames()) === 0;
+        })->map(function ($route) {
+            return url($route->uri());
+        });
+    }
+
+    public function routes()
+    {
+        $routes = $this->fromMiddleware();
+
+        $routes->each(function ($item) {
+            $this->sitemap->add(
+                Url::create($item)
+                    ->lastUpdate(config('simple-sitemap.default_last_update'))
+                    ->frequency(config('simple-sitemap.default_frequency'))
+                    ->priority(config('simple-sitemap.default_priority'))
             );
         });
 
