@@ -82,8 +82,6 @@ class SimpleSitemap
     {
         $routes = $this->fromMiddleware();
 
-        dd($routes);
-
         $routes->each(function ($item) {
             $this->sitemap->add(
                 Url::create($item)
