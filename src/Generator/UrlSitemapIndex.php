@@ -8,7 +8,7 @@ class UrlSitemapIndex
 
     public static function create($url)
     {
-        $newNode = new self();
+        $newNode = new self;
         $newNode->url = url($url);
 
         return $newNode;
