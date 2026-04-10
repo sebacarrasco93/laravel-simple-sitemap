@@ -12,7 +12,7 @@ trait SimpleSitemapCollection
     public function checkSitemapAttributes()
     {
         if (! $this->sitemap_url) {
-            throw new MissingSitemapUrlInsideModel();
+            throw new MissingSitemapUrlInsideModel;
         }
     }
 

@@ -16,13 +16,12 @@ class SimpleSitemap
 {
     public function __construct(
         public SitemapIndex $sitemap_index, public Sitemap $sitemap
-    ) {
-    }
+    ) {}
 
     public function checkRoutes(array $routes = []): void
     {
         if (! count($routes)) {
-            throw new EmptyRoutes();
+            throw new EmptyRoutes;
         }
     }
 
