@@ -54,13 +54,14 @@ class SimpleSitemap
         $collection->each(function ($item) {
             $this->checkMethod($item, 'getSitemapAttributes');
 
-            extract($item->getSitemapAttributes());
+            /** @phpstan-ignore-next-line */
+            $attributes = $item->getSitemapAttributes();
 
             $this->sitemap->add(
-                Url::create($url)
-                    ->lastUpdate($updated_at)
-                    ->frequency($frequency)
-                    ->priority($priority)
+                Url::create($attributes['url'])
+                    ->lastUpdate($attributes['updated_at'])
+                    ->frequency($attributes['frequency'])
+                    ->priority($attributes['priority'])
             );
         });
 
@@ -86,8 +87,8 @@ class SimpleSitemap
             $this->sitemap->add(
                 Url::create($item)
                     ->lastUpdate(config('simple-sitemap.default_last_update'))
-                    ->frequency($frequency)
-                    ->priority($priority)
+                    ->frequency(config('simple-sitemap.default_frequency'))
+                    ->priority(config('simple-sitemap.default_priority'))
             );
         });
 
