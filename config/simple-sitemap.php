@@ -42,6 +42,6 @@ return [
     */
 
     'exceptions' => [
-        'without_latest_update' => new \Exception('The latest update is required'),
+        'without_latest_update' => new Exception('The latest update is required'),
     ],
 ];
